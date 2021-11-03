@@ -1,70 +1,71 @@
 <!DOCTYPE html>
 <html lang="es">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rogue</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="description" content="Esta es una página personal que trataremos de encaminarlo hacia REACTORES químicos :-)">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Rogue</title>
+    </head>
 
-<body>
-    <header>
-        <h1>REACTOR </h1>
-    </header>
+    <body>
+        <header>
+            <h1>REACTOR </h1>
+        </header>
 
-    <canvas width="600" height="600"></canvas>
-    
-    <script>
-        let canvas = document.querySelector('canvas');
-        let context = canvas.getContext('2d');
+        <canvas width="600" height="600"></canvas>
+        
+        <script>
+            let canvas = document.querySelector('canvas');
+            let context = canvas.getContext('2d');
 
-        context.fillStyle = 'blue';
-        // context.fillRect(100, 100, 400, 400);
+            context.fillStyle = 'blue';
+            // context.fillRect(100, 100, 400, 400);
 
-        context.lineWidth = 4;
-        context.beginPath();
-        context.rect(100, 100, 400, 400);
-        // context.stroke();
+            context.lineWidth = 4;
+            context.beginPath();
+            context.rect(100, 100, 400, 400);
+            // context.stroke();
 
-        context.beginPath();
-        context.arc(300, 300, 100, 0, Math.PI * 2);
-        // context.stroke();
+            context.beginPath();
+            context.arc(300, 300, 100, 0, Math.PI * 2);
+            // context.stroke();
 
-        const width = 80;
-        const height = 60;
-        const gap = 20;
-        let x, y;
+            const width = 80;
+            const height = 60;
+            const gap = 20;
+            let x, y;
 
-        for (let i = 0; i < 5; i++) {
-            for (let j = 0; j < 5; j++) {
-                x = 100 + (width + gap) * i;
-                y = 100 + (height + gap) * j;
+            for (let i = 0; i < 5; i++) {
+                for (let j = 0; j < 5; j++) {
+                    x = 100 + (width + gap) * i;
+                    y = 100 + (height + gap) * j;
 
-                context.beginPath();
-                context.rect(x, y, width, height);
-                context.stroke();
-
-                // if (i > 0 && i < 4) {
-                if (Math.random() > 0.5) {
                     context.beginPath();
-                    context.rect(x + 8, y + 8, width - 16, height - 16);
+                    context.rect(x, y, width, height);
                     context.stroke();
+
+                    // if (i > 0 && i < 4) {
+                    if (Math.random() > 0.5) {
+                        context.beginPath();
+                        context.rect(x + 8, y + 8, width - 16, height - 16);
+                        context.stroke();
+                    }
                 }
             }
-        }
-    </script>
-    <p><img src="https://i.imgur.com/BgosKge.gif" /></p>
-    
-    <footer>
-        <script src="https://platform.linkedin.com/badges/js/profile.js" async defer type="text/javascript"></script>
-        <div class="badge-base LI-profile-badge" data-locale="es_ES" data-size="medium" data-theme="dark"
-            data-type="VERTICAL" data-vanity="arielmakerlab" data-version="v1"><a
-                class="badge-base__link LI-simple-link"
-                href="https://py.linkedin.com/in/arielmakerlab?trk=profile-badge">Ariel Martinez</a></div>
+        </script>
+        <p><img src="https://i.imgur.com/BgosKge.gif" /></p>
         
-        <p>Creado - BY MAKERLABPY</p>
-    </footer>
-</body>
+        <footer>
+            <script src="https://platform.linkedin.com/badges/js/profile.js" async defer type="text/javascript"></script>
+            <div class="badge-base LI-profile-badge" data-locale="es_ES" data-size="medium" data-theme="dark"
+                data-type="VERTICAL" data-vanity="arielmakerlab" data-version="v1"><a
+                    class="badge-base__link LI-simple-link"
+                    href="https://py.linkedin.com/in/arielmakerlab?trk=profile-badge">Ariel Martinez</a></div>
+            
+            <p>Creado - BY MAKERLABPY</p>
+        </footer>
+    </body>
 
 </html>
