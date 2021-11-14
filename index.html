@@ -8,14 +8,6 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Rogue</title>
-        <style>
-            canvas{
-                width: 50%;
-                margin: 0 auto;
-                display: block;
-                border: 1px solid #d9d9d9;
-            }
-        </style>
     </head>
 
     <body>
@@ -25,14 +17,6 @@
 
         <canvas width="600" height="600"></canvas>
         
-        <script>
-            var s = getComputedStyle(canvas);
-            var w = s.width;
-            var h = s.height;
-
-            canvas.width = w.split('px')[0];
-            canvas.height = h.split('px')[0];
-
             let canvas = document.querySelector('canvas');
             let context = canvas.getContext('2d');
 
