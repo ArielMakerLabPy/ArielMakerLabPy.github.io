@@ -19,7 +19,7 @@ html{
   .wrapper {
     background: #000000;
     line-height: 1;
-    height: 100vh;
+    height: 20vh;
     display: grid;
     place-items: center;
   }
@@ -28,8 +28,6 @@ html{
     font-family: "Exo", sans-serif;
     font-size: 15vw;
     font-weight: 900;
-    width: -webkit-min-content;
-    width: -moz-min-content;
     width: min-content;
     margin: auto;
     text-transform: uppercase;
@@ -60,6 +58,28 @@ html{
     radial-gradient(circle at 95% 95%, var(--color2) .45%, transparent .45%),
     radial-gradient(circle at 94.5% 97.5%, var(--color3) .5%, transparent .5%),
     radial-gradient(circle at 98.5% 95.5%, var(--color4) .25%, transparent .25%);
+  }
+
+  .dieciseis{
+    background: #000;
+    height: 20vh;
+    display: grid;
+    place-items: center;
+  }
+
+  .dieciseis__texto{
+    font-family: "Exo", sans-serif;
+    font-size: 15vw;
+    font-weight: 900;
+    width: min-content;
+    margin: auto;
+    text-transform: uppercase;
+    background: #ccc;
+    background: linear-gradient(red 0%, black 25%, yellow 50%, orange 75%, blue 100%);
+
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+
   }
   
   @media screen and (min-width: 768px) {
