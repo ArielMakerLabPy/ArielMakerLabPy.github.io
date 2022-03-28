@@ -1,38 +1,38 @@
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-html{
-    font-size: 62.5%;
+html {
+  font-size: 62.5%;
 }
 
 :root {
-    --color1: #186cb8;
-    --color2: #2a9a9f;
-    --color3: #f1b211;
-    --color4: #e83611;
-    --color5: #f9002f;
-  }
-  
-  .wrapper {
-    background: #000000;
-    line-height: 1;
-    height: 20vh;
-    height: min-content;
-    display: grid;
-    place-items: center;
-  }
-  
-  .container__titulo1 {
-    font-family: "Exo", sans-serif;
-    font-size: 15vw;
-    font-weight: 900;
-    width: min-content;
-    margin: auto;
-    text-transform: uppercase;
-    background: linear-gradient(219deg, 
+  --color1: #186cb8;
+  --color2: #2a9a9f;
+  --color3: #f1b211;
+  --color4: #e83611;
+  --color5: #f9002f;
+}
+
+.wrapper {
+  background: #000000;
+  line-height: 1;
+  height: 20vh;
+  height: min-content;
+  display: grid;
+  place-items: center;
+}
+
+.container__titulo1 {
+  font-family: "Exo", sans-serif;
+  font-size: 15vw;
+  font-weight: 900;
+  width: min-content;
+  margin: auto;
+  text-transform: uppercase;
+  background: linear-gradient(219deg,
       var(--color1) 19%,
       transparent 19%, transparent 20%,
       var(--color2) 20%, var(--color2) 39%,
@@ -42,50 +42,73 @@ html{
       var(--color4) 60%, var(--color4) 79%,
       transparent 79%, transparent 80%,
       var(--color5) 80%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-  }
-  
-  .container {
-    padding: 1.5rem;
-    text-align: center;
-    background: radial-gradient(circle at 1.4% 1.4%, var(--color1) .8%, transparent .8%),
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.container {
+  padding: 1.5rem;
+  text-align: center;
+  background: radial-gradient(circle at 1.4% 1.4%, var(--color1) .8%, transparent .8%),
     radial-gradient(circle at 5.5% 3%, var(--color2) .45%, transparent .45%),
     radial-gradient(circle at 2.5% 3.5%, var(--color3) .5%, transparent .5%),
     radial-gradient(circle at 4.5% 1.2%, var(--color4) .25%, transparent .25%),
-  
+
     radial-gradient(circle at 98% 98%, var(--color1) .8%, transparent .8%),
     radial-gradient(circle at 95% 95%, var(--color2) .45%, transparent .45%),
     radial-gradient(circle at 94.5% 97.5%, var(--color3) .5%, transparent .5%),
     radial-gradient(circle at 98.5% 95.5%, var(--color4) .25%, transparent .25%);
-  }
+}
 
-  .dieciseis{
-    background: #000;
-    height: 20vh;
-    height: min-content;
-    display: grid;
-    place-items: center;
-  }
+.dieciseis {
+  background: #000;
+  height: 20vh;
+  height: min-content;
+  display: grid;
+  place-items: center;
+}
 
-  .dieciseis__texto{
-    font-family: "Exo", sans-serif;
-    font-size: 15vw;
-    font-weight: 900;
-    width: min-content;
-    margin: auto;
-    text-transform: uppercase;
-    background: #ccc;
-    background: linear-gradient(red 0%, black 25%, yellow 50%, orange 75%, blue 100%);
+.dieciseis__texto {
+  font-family: "Exo", sans-serif;
+  font-size: 15vw;
+  font-weight: 900;
+  width: min-content;
+  margin: auto;
+  text-transform: uppercase;
+  background: #ccc;
+  background: linear-gradient(red 25%, black 35%, yellow 50%, orange 65%, blue 100%);
+  background-clip: border-box;
 
-    -webkit-text-fill-color: transparent;
-    -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+}
 
+.diecisiete {
+  background: #000;
+  height: 20vh;
+  height: min-content;
+  display: grid;
+  place-items: center;
+}
+
+.diecisiete__texto {
+  font-family: "Exo", sans-serif;
+  font-size: 15vw;
+  font-weight: 900;
+  width: min-content;
+  margin: auto;
+  text-transform: uppercase;
+  background: #ccc;
+  background: linear-gradient(15deg, black 25%, blue 35%, grey 50%, yellow 65%, red 100%);
+  background-clip: border-box;
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+
+}
+
+@media screen and (min-width: 320px) {
+  h2 {
+    font-size: 6.5em;
   }
-  
-  @media screen and (min-width: 768px) {
-    h2{
-      font-size: 6.5em;
-    }
-  }
+}
