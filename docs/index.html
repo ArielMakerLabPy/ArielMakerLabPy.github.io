@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ariel Martínez — Químico Digital</title>
+  <meta name="description" content="Ingeniero Químico, Especialista en Espectrometría XRF y Diseñador de Reactores desde Paraguay." />
+  <meta name="author" content="Ariel Martínez" />
+  <meta property="og:title" content="Ariel Martínez — Químico Digital" />
+  <meta property="og:description" content="Ingeniero Químico, Especialista en XRF y Maker desde Paraguay 🇵🇾" />
+  <meta property="og:image" content="https://avatars.githubusercontent.com/u/73312373?v=4" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+  <!-- Pantalla de carga -->
+  <div id="loader" aria-hidden="true">
+    <div class="loader-inner">
+      <div class="loader-bar-track"><div class="loader-bar-fill"></div></div>
+      <span class="loader-label">Inicializando espectrómetro…</span>
+    </div>
+  </div>
+
+  <!-- Overlay de grano -->
+  <div id="grain-overlay" aria-hidden="true"></div>
+
+  <!-- Header principal -->
+  <header id="site-header">
+    <div class="header-inner">
+      <a href="/" class="header-logo">Ariel Martínez</a>
+      <nav class="header-nav" aria-label="Navegación principal">
+        <a href="#about">Proyectos</a>
+        <a href="#about">Stack</a>
+        <a href="#about">Bio</a>
+        <a href="https://github.com/ArielMakerLabPy" target="_blank" rel="noopener">Fuente</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Hero — canvas XRF + texto tipografiado -->
+    <section id="hero" aria-label="Presentación">
+      <canvas id="xrf-canvas" aria-hidden="true"></canvas>
+      <div class="hero-text-wrap">
+        <p class="hero-greeting" id="typed-text" aria-live="polite"></p>
+      </div>
+      <div class="hero-scroll-hint" aria-hidden="true">
+        <span class="scroll-line"></span>
+        <span class="scroll-label">scroll</span>
+      </div>
+    </section>
+
+    <!-- Sección principal -->
+    <section id="about" aria-label="Sobre mí">
+      <div class="about-container">
+
+        <!-- Columna izquierda — sticky -->
+        <aside class="about-left">
+          <h1 class="main-name">Ariel<br/>Martínez</h1>
+          <p class="main-subtitle">
+            Químico Digital
+            <br/><span class="mono">( Ingeniero / Analista / Maker )</span>
+          </p>
+
+          <!-- Escena de perfil con parallax 3D -->
+          <div class="profile-scene" id="profile-scene" aria-label="Foto de perfil">
+            <!-- Capa fondo: glow -->
+            <div class="profile-layer layer-bg" aria-hidden="true">
+              <div class="profile-glow"></div>
+            </div>
+            <!-- Capa media: órbitas y partículas de elementos -->
+            <div class="profile-layer layer-mid" aria-hidden="true">
+              <div class="orbit orbit-1"></div>
+              <div class="orbit orbit-2"></div>
+              <div id="el-particles"></div>
+            </div>
+            <!-- Capa imagen -->
+            <div class="profile-layer layer-img">
+              <img
+                src="https://avatars.githubusercontent.com/u/73312373?v=4"
+                alt="Ariel Martínez"
+                class="profile-img"
+                id="profile-img"
+                loading="lazy"
+              />
+            </div>
+            <!-- Capa delantera: línea de escaneo -->
+            <div class="profile-layer layer-front" aria-hidden="true">
+              <div class="scan-line"></div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Columna derecha — contenido -->
+        <div class="about-right">
+
+          <article class="bio-block fade-in">
+            <h2>Trabajo</h2>
+            <p>
+              Ariel es ingeniero químico e investigador basado en Paraguay, con especialización en
+              <strong>espectrometría de fluorescencia de rayos X (XRF)</strong> y diseño de
+              reactores químicos industriales. En el laboratorio analiza la composición elemental
+              de materiales —desde materias primas hasta productos terminados— operando uno de
+              los instrumentos más sofisticados de la química analítica moderna. Fuera del lab,
+              construye sistemas de análisis de datos, dashboards industriales y herramientas de
+              automatización con IA para decisiones de negocio.
+            </p>
+            <a
+              href="https://github.com/ArielMakerLabPy?tab=repositories"
+              target="_blank"
+              rel="noopener"
+              class="btn-outline"
+            >Ver mis proyectos →</a>
+          </article>
+
+          <article class="bio-block fade-in">
+            <h2>Bio</h2>
+            <div class="timeline">
+              <div class="tl-item">
+                <span class="tl-year">199X</span>
+                <span class="tl-desc">Nació en Paraguay 🇵🇾</span>
+              </div>
+              <div class="tl-item">
+                <span class="tl-year">2016+</span>
+                <span class="tl-desc">Ingeniería Química — formación y práctica industrial intensiva</span>
+              </div>
+              <div class="tl-item">
+                <span class="tl-year">2020+</span>
+                <span class="tl-desc">Laboratorio XRF — análisis elemental por fluorescencia de rayos X</span>
+              </div>
+              <div class="tl-item">
+                <span class="tl-year">2021+</span>
+                <span class="tl-desc">Diseño y optimización de reactores químicos industriales</span>
+              </div>
+              <div class="tl-item">
+                <span class="tl-year">2022+</span>
+                <span class="tl-desc">Análisis de datos industriales · dashboards BI · automatización con Python & JS</span>
+              </div>
+              <div class="tl-item">
+                <span class="tl-year">Presente</span>
+                <span class="tl-desc">Maker &amp; Estudiante Eterno — en el cruce entre la química y los datos</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="bio-block fade-in">
+            <h2>Me apasiona</h2>
+            <p>
+              Espectrometría XRF, Diseño de Reactores, Química Analítica, Python, JavaScript,
+              Datos Industriales, Machine Learning, Automatización, Maker Culture, Emprendimiento
+            </p>
+          </article>
+
+          <article class="bio-block fade-in">
+            <h2>Stack principal</h2>
+            <div class="stack-grid">
+              <span class="stack-tag">Python</span>
+              <span class="stack-tag">JavaScript</span>
+              <span class="stack-tag">HTML / CSS</span>
+              <span class="stack-tag">Pandas</span>
+              <span class="stack-tag">NumPy</span>
+              <span class="stack-tag">Chart.js</span>
+              <span class="stack-tag">SheetJS</span>
+              <span class="stack-tag">Power BI</span>
+              <span class="stack-tag">Excel</span>
+              <span class="stack-tag">OpenAI API</span>
+              <span class="stack-tag">Git</span>
+              <span class="stack-tag">p5.js</span>
+            </div>
+          </article>
+
+          <article class="bio-block fade-in">
+            <h2>En la web</h2>
+            <ul class="social-list">
+              <li>
+                <a href="https://github.com/ArielMakerLabPy" target="_blank" rel="noopener">
+                  <span class="social-handle">@ArielMakerLabPy</span>
+                  <span class="social-platform">GitHub</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://x.com/Ariel_MartinezV" target="_blank" rel="noopener">
+                  <span class="social-handle">@Ariel_MartinezV</span>
+                  <span class="social-platform">X / Twitter</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.facebook.com/ArielMartinezVel" target="_blank" rel="noopener">
+                  <span class="social-handle">@ArielMartinezVel</span>
+                  <span class="social-platform">Facebook</span>
+                </a>
+              </li>
+              <li>
+                <a href="http://ar-reactor.web.app" target="_blank" rel="noopener">
+                  <span class="social-handle">ar-reactor.web.app</span>
+                  <span class="social-platform">Web personal</span>
+                </a>
+              </li>
+            </ul>
+          </article>
+
+        </div><!-- /about-right -->
+      </div><!-- /about-container -->
+    </section>
+
+  </main>
+
+  <footer id="site-footer">
+    <div class="footer-inner">
+      <p>© 2026 Ariel Martínez. Todos los derechos reservados.</p>
+      <p class="footer-sub">Hecho con código desde Paraguay 🇵🇾</p>
+    </div>
+  </footer>
+
+  <script src="assets/javascript.js"></script>
+</body>
+</html>
