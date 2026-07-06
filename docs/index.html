@@ -32,7 +32,7 @@
     <div class="header-inner">
       <a href="/" class="header-logo">Ariel Martínez</a>
       <nav class="header-nav" aria-label="Navegación principal">
-        <a href="#about">Proyectos</a>
+        <a href="#lab-game">Lab 🎮</a>
         <a href="#about">Stack</a>
         <a href="#about">Bio</a>
         <a href="https://github.com/ArielMakerLabPy" target="_blank" rel="noopener">Fuente</a>
@@ -51,6 +51,53 @@
       <div class="hero-scroll-hint" aria-hidden="true">
         <span class="scroll-line"></span>
         <span class="scroll-label">scroll</span>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         JUEGO — Laboratorio FRX interactivo
+         El visitante "dibuja" una muestra clickeando las barras de
+         óxidos (eje X = óxidos, eje Y = concentración) y el motor le
+         dice a qué material real se parece su mezcla.
+         ============================================================ -->
+    <section id="lab-game" aria-label="Juego: laboratorio FRX interactivo">
+      <div class="game-container">
+
+        <!-- Encabezado: deja claro que es un JUEGO -->
+        <div class="game-header fade-in">
+          <span class="game-badge">🎮 Mini-juego interactivo</span>
+          <h2 class="game-title">Analizá una muestra como un FRX</h2>
+          <p class="game-intro">
+            Un espectrómetro de <strong>fluorescencia de rayos X (FRX)</strong> mide
+            de qué está hecho un material y lo reporta como <strong>óxidos</strong>.
+            Hacé clic en cada columna para fijar la <strong>altura</strong> (la
+            concentración) de cada óxido y luego presioná
+            <strong>Analizar muestra</strong>: el sistema te dirá a qué material real
+            se parece tu mezcla. ¡Probá inventar un cemento o un vidrio!
+          </p>
+        </div>
+
+        <!-- Tablero del juego: el canvas donde se dibujan las barras -->
+        <div class="game-board fade-in">
+          <!-- aria-label describe el juego para lectores de pantalla -->
+          <canvas id="game-canvas"
+                  role="img"
+                  aria-label="Gráfico interactivo: clic en cada columna de óxido para fijar su concentración"></canvas>
+        </div>
+
+        <!-- Controles: botones para analizar y reiniciar la muestra -->
+        <div class="game-controls fade-in">
+          <button id="game-analyze" class="btn-game btn-game-primary" type="button">
+            Analizar muestra →
+          </button>
+          <button id="game-reset" class="btn-game" type="button">
+            Reiniciar
+          </button>
+        </div>
+
+        <!-- Panel de resultados: aquí aparece el ranking de materiales -->
+        <div id="game-results" class="game-results fade-in" aria-live="polite"></div>
+
       </div>
     </section>
 
