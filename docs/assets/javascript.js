@@ -469,3 +469,250 @@ window.addEventListener('load', () => {
 
   els.forEach(el => observer.observe(el));
 })();
+
+/* ─────────────────────────────────────────
+   8. JUEGO — LABORATORIO FRX INTERACTIVO
+      El usuario dibuja barras (eje X = óxidos,
+      eje Y = concentración) y el motor le dice
+      a qué material real se parece su mezcla.
+───────────────────────────────────────── */
+(function initLabGame() {
+  const canvas = document.getElementById('game-canvas');
+  if (!canvas) return;                       // si no existe el canvas, no hacemos nada
+  const ctx = canvas.getContext('2d');
+
+  /* ── Colores del tema (los mismos del CSS) ── */
+  const COL_PRIMARY = '#00c6b3';             // teal
+  const COL_ACCENT  = '#f08a3e';             // naranja
+  const COL_GRID    = 'rgba(30,50,80,0.6)';  // líneas de la grilla
+  const COL_TEXT    = '#8494a8';             // texto suave
+
+  /* ── Eje X: los 12 óxidos que mide el FRX ── */
+  const OXIDOS = ['SiO₂','Al₂O₃','Fe₂O₃','CaO','MgO','K₂O',
+                  'Na₂O','TiO₂','MnO','P₂O₅','SO₃','ZrO₂'];
+
+  /* ── Huellas de referencia ──
+     Cada material tiene un % aproximado de cada óxido,
+     en el MISMO orden que el array OXIDOS de arriba.
+     Contra estos valores se compara lo que dibuja el usuario. */
+  const MATERIALES = [
+    { nombre: 'Cemento Portland',    perfil: [21, 5,  3,  64, 2,  0.5, 0.2, 0.3, 0.1, 0.1, 3,  0  ] },
+    { nombre: 'Vidrio sodocálcico',  perfil: [72, 1.5,0.1, 9,  4,  0.5, 13,  0,   0,   0,   0.2,0  ] },
+    { nombre: 'Caliza (CaCO₃)',      perfil: [3,  1,  0.5, 53, 1,  0.2, 0.1, 0,   0,   0,   0.1,0  ] },
+    { nombre: 'Arcilla caolinítica', perfil: [47, 38, 1,  0.2, 0.3,1,   0.2, 1.5, 0,   0.2, 0,  0  ] },
+    { nombre: 'Basalto',             perfil: [49, 15, 12, 9,  7,  1,   3,   2,   0.2, 0.3, 0,  0  ] },
+    { nombre: 'Escoria alto horno',  perfil: [35, 12, 0.5, 40, 8,  0.5, 0.3, 0.5, 0.5, 0,   2,  0  ] },
+    { nombre: 'Arena sílice',        perfil: [96, 1.5,0.3, 0.1,0,  0.3, 0.1, 0.1, 0,   0,   0,  0.3] },
+    { nombre: 'Yeso (CaSO₄·2H₂O)',   perfil: [2,  0.5,0.2, 32, 0.5,0,   0,   0,   0,   0,   46, 0  ] },
+  ];
+
+  /* ── Estado del juego ──
+     alturas[i] = concentración (0 a 100) de cada óxido que fija el usuario. */
+  let alturas = new Array(OXIDOS.length).fill(0);
+  let hover = -1;                             // índice de la barra bajo el mouse (-1 = ninguna)
+  let W, H, dpr;                              // ancho, alto y densidad de píxeles
+  const MARGEN = { top: 24, right: 16, bottom: 46, left: 36 };
+
+  /* ── Ajusta el tamaño del canvas a la pantalla (nítido en pantallas HiDPI) ── */
+  function resize() {
+    dpr = window.devicePixelRatio || 1;      // 2 en pantallas retina, 1 en normales
+    const rect = canvas.getBoundingClientRect();
+    canvas.width  = rect.width  * dpr;        // resolución real (en píxeles físicos)
+    canvas.height = rect.height * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);   // escalamos para dibujar en píxeles "lógicos"
+    W = rect.width;
+    H = rect.height;
+    dibujar();
+  }
+
+  /* ── Devuelve la geometría de la zona dibujable (sin los márgenes) ── */
+  function area() {
+    return {
+      x: MARGEN.left,
+      y: MARGEN.top,
+      w: W - MARGEN.left - MARGEN.right,
+      h: H - MARGEN.top - MARGEN.bottom,
+    };
+  }
+
+  /* ── Dibuja TODO el gráfico: grilla, barras y etiquetas ── */
+  function dibujar() {
+    const a = area();
+    ctx.clearRect(0, 0, W, H);                // limpia el lienzo
+
+    /* Líneas horizontales de referencia (0, 25, 50, 75, 100 %) */
+    ctx.font = '9px DM Mono, monospace';
+    ctx.fillStyle = COL_TEXT;
+    ctx.strokeStyle = COL_GRID;
+    ctx.lineWidth = 0.5;
+    for (let p = 0; p <= 100; p += 25) {
+      const y = a.y + a.h - (p / 100) * a.h;  // convierte % en coordenada vertical
+      ctx.beginPath();
+      ctx.moveTo(a.x, y);
+      ctx.lineTo(a.x + a.w, y);
+      ctx.stroke();
+      ctx.textAlign = 'right';
+      ctx.fillText(p + '%', a.x - 6, y + 3);  // etiqueta del eje Y
+    }
+
+    /* Una barra por cada óxido */
+    const paso  = a.w / OXIDOS.length;        // ancho que le toca a cada columna
+    const ancho = paso * 0.6;                 // ancho real de la barra (deja aire)
+
+    for (let i = 0; i < OXIDOS.length; i++) {
+      const cx = a.x + paso * i + paso / 2;   // centro horizontal de la columna
+      const barH = (alturas[i] / 100) * a.h;  // alto de la barra según su %
+      const topY = a.y + a.h - barH;          // coordenada del tope de la barra
+      const activa = i === hover;             // ¿está el mouse encima?
+
+      /* Fondo tenue de la columna (zona clickeable, ayuda a ubicarse) */
+      ctx.fillStyle = activa ? 'rgba(0,198,179,0.07)' : 'rgba(255,255,255,0.015)';
+      ctx.fillRect(a.x + paso * i, a.y, paso, a.h);
+
+      /* La barra en sí, con degradado teal→naranja */
+      if (barH > 0) {
+        const grad = ctx.createLinearGradient(0, a.y + a.h, 0, topY);
+        grad.addColorStop(0, COL_PRIMARY);
+        grad.addColorStop(1, COL_ACCENT);
+        ctx.fillStyle = grad;
+        ctx.fillRect(cx - ancho / 2, topY, ancho, barH);
+
+        /* Valor numérico arriba de la barra */
+        ctx.fillStyle = '#e8ecf1';
+        ctx.textAlign = 'center';
+        ctx.fillText(Math.round(alturas[i]) + '%', cx, topY - 5);
+      }
+
+      /* Etiqueta del óxido en el eje X (resaltada si hay hover) */
+      ctx.fillStyle = activa ? COL_PRIMARY : COL_TEXT;
+      ctx.textAlign = 'center';
+      ctx.fillText(OXIDOS[i], cx, a.y + a.h + 16);
+    }
+
+    /* Título de los ejes */
+    ctx.fillStyle = COL_TEXT;
+    ctx.textAlign = 'center';
+    ctx.fillText('Óxidos que mide el FRX', a.x + a.w / 2, H - 6);
+  }
+
+  /* ── Traduce la posición del mouse/dedo a coordenadas del canvas ── */
+  function posicion(evento) {
+    const rect = canvas.getBoundingClientRect();
+    const fuente = evento.touches ? evento.touches[0] : evento;  // soporta touch y mouse
+    return {
+      x: fuente.clientX - rect.left,
+      y: fuente.clientY - rect.top,
+    };
+  }
+
+  /* ── Calcula a qué columna (óxido) corresponde una posición X ── */
+  function columnaEn(x) {
+    const a = area();
+    if (x < a.x || x > a.x + a.w) return -1;   // fuera del área dibujable
+    const paso = a.w / OXIDOS.length;
+    return Math.floor((x - a.x) / paso);
+  }
+
+  /* ── Click / tap: fija la altura de la barra hasta donde está el cursor ── */
+  function fijarAltura(evento) {
+    const p = posicion(evento);
+    const i = columnaEn(p.x);
+    if (i < 0) return;
+    const a = area();
+    /* Convierte la posición vertical del cursor en un % (invertido: arriba = más) */
+    let pct = ((a.y + a.h - p.y) / a.h) * 100;
+    pct = Math.max(0, Math.min(100, pct));     // lo limita entre 0 y 100
+    alturas[i] = pct;
+    dibujar();
+  }
+
+  /* ── Motor de coincidencia: similitud coseno entre dos perfiles ──
+     Devuelve un número entre 0 (nada que ver) y 1 (idénticos en forma). */
+  function coseno(u, m) {
+    let punto = 0, normU = 0, normM = 0;
+    for (let i = 0; i < u.length; i++) {
+      punto += u[i] * m[i];                    // producto punto
+      normU += u[i] * u[i];
+      normM += m[i] * m[i];
+    }
+    if (normU === 0 || normM === 0) return 0;  // evita dividir por cero
+    return punto / (Math.sqrt(normU) * Math.sqrt(normM));
+  }
+
+  /* ── Analiza la muestra dibujada y muestra el ranking de materiales ── */
+  function analizar() {
+    const panel = document.getElementById('game-results');
+    const suma = alturas.reduce((s, v) => s + v, 0);
+
+    /* Si el usuario no dibujó nada, pedimos que lo haga */
+    if (suma === 0) {
+      panel.innerHTML = '<p class="result-hint">Hacé clic en las columnas para fijar la concentración de cada óxido y volvé a intentar.</p>';
+      return;
+    }
+
+    /* Calcula la similitud contra cada material de referencia */
+    const ranking = MATERIALES.map(mat => ({
+      nombre: mat.nombre,
+      sim: coseno(alturas, mat.perfil),        // 0 a 1
+    }));
+
+    /* Ordena de mayor a menor parecido y toma los 3 primeros */
+    ranking.sort((a, b) => b.sim - a.sim);
+    const top = ranking.slice(0, 3);
+
+    /* Si ni el mejor llega a 60%, avisamos que parece una mezcla rara */
+    let html = '';
+    if (top[0].sim < 0.6) {
+      html += '<p class="result-hint">⚠️ Mezcla no identificada — podría ser un material compuesto.</p>';
+    }
+
+    /* Construye una tarjeta por cada material del top 3 */
+    top.forEach(r => {
+      const pct = Math.round(r.sim * 100);
+      html += `
+        <div class="result-card">
+          <span class="result-name">${r.nombre}</span>
+          <span class="result-bar-track">
+            <span class="result-bar-fill" style="width:${pct}%"></span>
+          </span>
+          <span class="result-pct">${pct}%</span>
+        </div>`;
+    });
+    panel.innerHTML = html;
+  }
+
+  /* ── Reinicia el juego: todo a cero ── */
+  function reiniciar() {
+    alturas = new Array(OXIDOS.length).fill(0);
+    document.getElementById('game-results').innerHTML = '';
+    dibujar();
+  }
+
+  /* ── Conexión de eventos (clicks, mouse, touch, botones) ── */
+  canvas.addEventListener('click', fijarAltura);
+
+  /* Mientras se mantiene presionado y se arrastra, se "pinta" la altura */
+  let arrastrando = false;
+  canvas.addEventListener('mousedown', () => { arrastrando = true; });
+  window.addEventListener('mouseup',   () => { arrastrando = false; });
+  canvas.addEventListener('mousemove', e => {
+    hover = columnaEn(posicion(e).x);          // resalta la columna bajo el mouse
+    if (arrastrando) fijarAltura(e);
+    dibujar();
+  });
+  canvas.addEventListener('mouseleave', () => { hover = -1; dibujar(); });
+
+  /* Soporte táctil para móviles */
+  canvas.addEventListener('touchstart', e => { fijarAltura(e); }, { passive: true });
+  canvas.addEventListener('touchmove',  e => { fijarAltura(e); }, { passive: true });
+
+  /* Botones */
+  document.getElementById('game-analyze').addEventListener('click', analizar);
+  document.getElementById('game-reset').addEventListener('click', reiniciar);
+
+  /* Redibuja si cambia el tamaño de la ventana */
+  window.addEventListener('resize', resize, { passive: true });
+
+  /* Arranque del juego */
+  resize();
+})();
